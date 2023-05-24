@@ -1,7 +1,7 @@
-# This scritps aims to identify DE lists of RNAseq samples (second run)
+# This scritps aims to perform DE analysis and identify DE lists of RNAseq samples 
 
 
-# Laod R libraries
+# Laod libraries
 library(DT)
 library(data.table)
 library(stringr)
