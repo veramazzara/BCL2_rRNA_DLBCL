@@ -1,6 +1,6 @@
-# This scritp aims to compute Enrichment Analysis for DE genes (RNAseq)
+# This scritp aims to compute Pathway Enrichment Analysis for DE genes (RNAseq)
 
-# ref: https://www.biostars.org/p/220465/ 
+# Load libraries
 library(clusterProfiler)
 library(org.Hs.eg.db)
 library(ggplot2)
