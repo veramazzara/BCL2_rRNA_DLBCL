@@ -1,6 +1,7 @@
 # This script aims to prepare BCL2 and MYC KM in the discovery and validation cohort
-# 8FigS2)
+# (ex FigS2)
 
+# Load libraries
 library(openxlsx)
 library(readxl)
 library(survival)
@@ -28,44 +29,7 @@ data_dlcl04$IPI<-c("High",rep("Intermediate-High",11),"High",rep("Intermediate-H
                    rep("High",2),"Intermediate-High","High",rep("Intermediate-High",3),
                    "High",rep("Intermediate-High",6),"High","Intermediate-High")
 
-# maxstat threshold
-# BCL2
-res.cut_bcl2 <- surv_cutpoint(data_dlcl04, time = "Mesi_OS", event = "Evento_OS",
-                         variables = c("BCL2_log2"))
-res.cat_bcl2 <- surv_categorize(res.cut_bcl2)
-
-# MYC
-res.cut_myc <- surv_cutpoint(data_dlcl04, time = "Mesi_OS", event = "Evento_OS",
-                              variables = c("MYC_log2"))
-res.cat_myc <- surv_categorize(res.cut_myc)
-
-# AgNOR
-res.cut_agnor <- surv_cutpoint(data_dlcl04, time = "Mesi_OS", event = "Evento_OS",
-                             variables = c("AgNOR"))
-res.cat_agnor <- surv_categorize(res.cut_agnor)
-
-# Assign the class
-data_dlcl04$BCL2_class<-res.cat_bcl2$BCL2_log2
-data_dlcl04$MYC_class<-res.cat_myc$MYC_log2
-data_dlcl04$AgNOR_class<-res.cat_agnor$AgNOR
-
-# DEXP
-data_dlcl04$DEXP_class<-paste(data_dlcl04$MYC_class,data_dlcl04$BCL2_class,sep="_")
-
-data_dlcl04$DEXP_class<-gsub("high_high","yes",data_dlcl04$DEXP_class)
-data_dlcl04$DEXP_class<-gsub("high_low","no",data_dlcl04$DEXP_class)
-data_dlcl04$DEXP_class<-gsub("low_high","no",data_dlcl04$DEXP_class)
-data_dlcl04$DEXP_class<-gsub("low_low","no",data_dlcl04$DEXP_class)
-
-# KM
-fit_sig<-survfit(Surv(Mesi_OS,Evento_OS) ~ AgNOR_class, data = data_dlcl04)
-
-ggsurvplot(fit_sig,pval = TRUE,
-           risk.table = TRUE, # Add risk table
-           risk.table.title="",
-           title="OS AgNOR (DLCL04)")
-
-#### Median
+#### Median Threshold
 data_dlcl04$BCL2_median_class<- data_dlcl04$BCL2_log2 > median(data_dlcl04$BCL2_log2)
 data_dlcl04$MYC_median_class<- data_dlcl04$MYC_log2 > median(data_dlcl04$MYC_log2)
 
@@ -90,9 +54,6 @@ ggsurvplot(fit_sig,pval = TRUE,
           # palette=c("#c30101","#0a00ff"),
            ggtheme = theme_bw(),
            title="PFS BCL2 (DLCL04)")
-
-
-
 
 
 
@@ -137,46 +98,7 @@ data_bo$IPI<-gsub("3","High",data_bo$IPI)
 data_bo$IPI<-gsub("4","High",data_bo$IPI)
 
 
-# maxstat threshold
-# BCL2
-res.cut_bcl2 <- surv_cutpoint(data_bo, time = "Mesi_PFS", event = "Evento_PFS_original",
-                              variables = c("BCL2_log2"))
-res.cat_bcl2 <- surv_categorize(res.cut_bcl2)
-
-# MYC
-res.cut_myc <- surv_cutpoint(data_bo, time = "Mesi_PFS", event = "Evento_PFS_original",
-                             variables = c("MYC_log2"))
-res.cat_myc <- surv_categorize(res.cut_myc)
-
-# AgNOR
-res.cut_agnor <- surv_cutpoint(data_bo, time = "Mesi_PFS", event = "Evento_PFS_original",
-                               variables = c("AgNOR"))
-res.cat_agnor <- surv_categorize(res.cut_agnor)
-
-# Assign the class
-data_bo$BCL2_class<-res.cat_bcl2$BCL2_log2
-data_bo$MYC_class<-res.cat_myc$MYC_log2
-data_bo$AgNOR_class<-res.cat_agnor$AgNOR
-
-# DEXP
-data_bo$DEXP_class<-paste(data_bo$MYC_class,data_bo$BCL2_class,sep="_")
-
-data_bo$DEXP_class<-gsub("high_high","yes",data_bo$DEXP_class)
-data_bo$DEXP_class<-gsub("high_low","no",data_bo$DEXP_class)
-data_bo$DEXP_class<-gsub("low_high","no",data_bo$DEXP_class)
-data_bo$DEXP_class<-gsub("low_low","no",data_bo$DEXP_class)
-
-# cponvert 
-
-# KM
-fit_sig<-survfit(Surv(Mesi_PFS,Evento_PFS_original) ~ BCL2_class, data = data_bo)
-
-ggsurvplot(fit_sig,pval = TRUE,
-           risk.table = TRUE, # Add risk table
-           risk.table.title="",
-           title="PFS BCL2 (BO)")
-
-###### Median
+###### Median Threshold
 # define the High and Low Class
 data_bo$BCL2_median_class<- data_bo$BCL2_log2 > median(data_bo$BCL2_log2)
 data_bo$MYC_median_class<- data_bo$MYC_log2 > median(data_bo$MYC_log2)
@@ -223,43 +145,6 @@ colnames(new_data_bo_filt)[2]<-"CodicePaz"
 temp<-semi_join(data_bo[,c(1,6)],new_data_bo_filt[,c(2,8)])
 
 data_bo_filt<-semi_join(data_bo,temp)
-
-# Maxstat threshold
-# BCL2
-res.cut_bcl2 <- surv_cutpoint(data_bo_filt, time = "Mesi_OS", event = "Evento_OS_original",
-                              variables = c("BCL2_log2"))
-res.cat_bcl2 <- surv_categorize(res.cut_bcl2)
-
-# MYC
-res.cut_myc <- surv_cutpoint(data_bo_filt, time = "Mesi_OS", event = "Evento_OS_original",
-                             variables = c("MYC_log2"))
-res.cat_myc <- surv_categorize(res.cut_myc)
-
-# AgNOR
-res.cut_agnor <- surv_cutpoint(data_bo_filt, time = "Mesi_OS", event = "Evento_OS_original",
-                               variables = c("AgNOR"))
-res.cat_agnor <- surv_categorize(res.cut_agnor)
-
-# Assign the class
-data_bo_filt$BCL2_class<-res.cat_bcl2$BCL2_log2
-data_bo_filt$MYC_class<-res.cat_myc$MYC_log2
-data_bo_filt$AgNOR_class<-res.cat_agnor$AgNOR
-
-# DEXP
-data_bo_filt$DEXP_class<-paste(data_bo_filt$MYC_class,data_bo_filt$BCL2_class,sep="_")
-
-data_bo_filt$DEXP_class<-gsub("high_high","yes",data_bo_filt$DEXP_class)
-data_bo_filt$DEXP_class<-gsub("high_low","no",data_bo_filt$DEXP_class)
-data_bo_filt$DEXP_class<-gsub("low_high","no",data_bo_filt$DEXP_class)
-data_bo_filt$DEXP_class<-gsub("low_low","no",data_bo_filt$DEXP_class)
-
-# KM
-fit_sig<-survfit(Surv(Mesi_OS,Evento_OS_original) ~ BCL2_class, data = data_bo_filt)
-
-ggsurvplot(fit_sig,pval = TRUE,
-           risk.table = TRUE, # Add risk table
-           risk.table.title="",
-           title="OS BCL2 (BO filtered)")
 
 ######## Median threshold
 
