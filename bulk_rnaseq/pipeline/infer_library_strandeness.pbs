@@ -1,0 +1,46 @@
+#!/bin/bash
+# Option for PBS
+### Job name
+#PBS -N library_strandness_step
+
+### Join queuing system output and error files into a single output file
+#PBS -j oe
+
+### Request nodes, memory, walltime. N.B. THESE ARE REQUIRED
+#PBS -l select=1:ncpus=4:mem=12g
+
+### Set a list of email addresses that receive mail from PBS
+#PBS -M saveria.mazzara@ieo.it
+
+### Specify in which case an email should be send, a=abort, b=begin, e=end
+#PBS -m abe
+                        
+### Account string: defines the account string associated with the job
+#PBS -A ieo4890
+
+# This script computes the level of rRNA contamination using seal.sh (BBmap tool)
+
+
+## Configuration 
+## --------------------
+
+# Activate the conda environment
+source activate /hpcnfs/home/ieo4890/.conda/envs/rnaseq_env
+
+# path to the run folder
+RUN_PATH="/hpcnfs/data/ED/RNAseq/LONCA"
+GTF_FILE="/hpcnfs/scratch/ED/genome/gencode.v34.primary_assembly.annotation.gtf"
+
+## Infer Library Strandness
+## --------------------
+
+for file in $(ls $RUN_PATH | grep "S38463")
+do
+   SAMPLE=`basename $file`
+   cd $RUN_PATH/$SAMPLE
+                                     
+    /hpcnfs/home/ieo4890/.conda/envs/rnaseq_env/bin/infer_experiment.py -r /hpcnfs/scratch/ED/genome/gencode.annotation.gtf.bed -i ${SAMPLE}Aligned.sortedByCoord.out.bam
+done
+
+# Deactivate the environment
+source deactivate /hpcnfs/home/ieo4890/.conda/envs/rnaseq_env
