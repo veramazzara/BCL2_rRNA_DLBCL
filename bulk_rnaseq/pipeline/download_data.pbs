@@ -1,0 +1,52 @@
+#!/bin/bash
+# Option for PBS
+### Job name
+#PBS -N download_step
+
+### Join queuing system output and error files into a single output file
+#PBS -j oe
+
+### Request nodes, memory, walltime. N.B. THESE ARE REQUIRED
+#PBS -l select=1:ncpus=6:mem=6g
+
+### Set a list of email addresses that receive mail from PBS
+#PBS -M saveria.mazzara@ieo.it
+
+### Specify in which case an email should be send, a=abort, b=begin, e=end
+#PBS -m abe
+
+### Account string: defines the account string associated with the job
+#PBS -A ieo4890
+
+# This script performs the data download: reference genome (fasta file) and annotation file (gtf file)
+
+
+
+## Configuration 
+## --------------------
+
+# path to the run folder
+OUTPUT_PATH="/hpcnfs/scratch/ED/genome/"
+
+
+## Download Step
+## --------------------
+
+cd $OUTPUT_PATH
+
+# download the "Genome sequence, primary assembly (GRCh38)" fasta file
+#wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_34/GRCh38.primary_assembly.genome.fa.gz
+
+# download the annotations that correspond to it 
+wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_34/gencode.v34.basic.annotation.gtf.gz
+
+wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_34/gencode.v34.primary_assembly.annotation.gtf.gz
+
+
+## Ungzip the genome files
+#gunzip GRCh38.primary_assembly.genome.fa.gz
+
+gunzip gencode.v34.basic.annotation.gtf.gz
+gunzip gencode.v34.primary_assembly.annotation.gtf.gz
+
+ 
