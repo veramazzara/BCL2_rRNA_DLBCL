@@ -1,0 +1,56 @@
+#!/bin/bash
+# Option for PBS
+### Job name 
+#PBS -N fastqc_step
+
+### Join queuing system output and error files into a single output file
+#PBS -j oe
+
+### Request nodes, memory, walltime. N.B. THESE ARE REQUIRED
+#PBS -l select=2:ncpus=6
+
+### Set a list of email addresses that receive mail from PBS
+#PBS -M saveria.mazzara@ieo.it
+
+### Specify in which case an email should be send, a=abort, b=begin, e=end
+#PBS -m abe
+
+### Account string: defines the account string associated with the job
+#PBS -A ieo4890
+
+# This script performs the quality check step invoking FASTQC tool
+
+
+## Configuration
+## ---------------------
+
+# Activate the conda environment
+source activate /hpcnfs/home/ieo4890/.conda/envs/exome_env
+
+# Calling variables
+# path to the run sequencing folder containing the raw reads (.fastq.gz)
+RUN_PATH="/hpcnfs/data/ED/RNAseq/BCL2/"
+
+# path to the run folder where saved the results of the computational step
+OUTPUT_PATH="/hpcnfs/data/ED/RNAseq/BCL2/"
+
+# Directory of the considered computational step
+#OUTDIR="fastqc"
+
+## FastQC Step
+## --------------------
+
+for file in $(ls $RUN_PATH | grep "S29")
+do 
+    SAMPLE=`basename $file`
+    cd $RUN_PATH/$SAMPLE
+    fastqc --o $OUTPUT_PATH/$SAMPLE ${SAMPLE}_R1.fastq.gz ${SAMPLE}_R2.fastq.gz
+
+done
+
+
+# Deactivate the environment
+source deactivate /hpcnfs/home/ieo4890/.conda/envs/exome_env
+
+
+
