@@ -29,10 +29,8 @@
 source activate /home/mazzara/.conda/envs/rnaseq_env
 
 # path to the run folder
-INPUT_DIR="/hpcnfs/data/ED/RNAseq/BCL2"
-OUTPUT_DIR="/hpcnfs/scratch/ED/trimm_mapping/BCL2/"
-GENOME_DIR="/hpcnfs/scratch/ED/genome/STAR/"
-GTF_FILE="/hpcnfs/scratch/ED/genome/gencode.v34.primary_assembly.annotation.gtf"
+INPUT_DIR="/data/RNAseq/BCL2"
+OUTPUT_DIR="/scratch/trimming_mapping/BCL2/"
 
 
 ## Trimming Step
@@ -42,7 +40,8 @@ GTF_FILE="/hpcnfs/scratch/ED/genome/gencode.v34.primary_assembly.annotation.gtf"
 #SAMPLE=`basename $OUTPREFIX`
 #cd $INPUT_DIR/$SAMPLE
 
-bbduk.sh in=/hpcnfs/data/ED/RNAseq/BCL2/S27021/S27021_SUDHL5_24h_DOXI_BCL2-UTR_S28_L001_R1_001.fastq.gz in2=/hpcnfs/data/ED/RNAseq/BCL2/S27021/S27021_SUDHL5_24h_DOXI_BCL2-UTR_S28_L001_R2_001.fastq.gz out=$OUTPUT_DIR/S27021/S27021_trim_R1.fastq.gz out2=$OUTPUT_DIR/S27021/S27021_trim_R2.fastq.gz qtrim=r minlen=25
+# example related to one sample of the RNA cohort
+bbduk.sh in=$INPUT_DIR/Sample1/Sample1_L001_R1_001.fastq.gz in2=$INPUT_DIR/Sample1/Sample1_L001_R2_001.fastq.gz out=$OUTPUT_DIR/Sample1/Sample1_trim_R1.fastq.gz out2=$OUTPUT_DIR/Sample1/Sample1_trim_R2.fastq.gz qtrim=r minlen=25
 
 # Deactivate the environment
 source deactivate /home/mazzara/.conda/envs/rnaseq_env
