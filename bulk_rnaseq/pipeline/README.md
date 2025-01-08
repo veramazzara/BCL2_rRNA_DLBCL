@@ -1,4 +1,5 @@
-**01 download_genome.pbs** : download genome annotation (GRCh38)
+**01. download_genome.pbs** : download genome annotation (GRCh38)
+**02. quality_check.pbs**   : quality check of sequencing reads using FastQC
 
 
 
