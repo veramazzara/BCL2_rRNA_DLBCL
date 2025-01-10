@@ -1,0 +1,45 @@
+#!/bin/bash
+# Option for PBS
+### Job name
+#PBS -N genome_indexes_step
+
+### Join queuing system output and error files into a single output file
+#PBS -j oe
+
+### Request nodes, memory, walltime. N.B. THESE ARE REQUIRED
+#PBS -l select=1:ncpus=12:mem=40g
+
+### Set a list of email addresses that receive mail from PBS
+#PBS -M saveria.mazzara@ieo.it
+
+### Specify in which case an email should be send, a=abort, b=begin, e=end
+#PBS -m abe
+
+### Account string: defines the account string associated with the job
+#PBS -A ieo4890
+
+# This script performs the data download: reference genome (fasta file) and annotation file (gtf file)
+
+
+
+## Configuration 
+## --------------------
+
+# Activate the conda environment
+source activate /hpcnfs/home/ieo4890/.conda/envs/rnaseq_env
+
+# path to the run folder
+GENOME_DIR="/hpcnfs/scratch/ED/genome/"
+
+
+## Generate genome indexes Step
+## --------------------
+
+cd $GENOME_DIR
+
+#mkdir $GENOME_DIR/STAR
+
+STAR --runThreadN 8 --runMode genomeGenerate --genomeDir /hpcnfs/scratch/ED/genome/STAR --genomeFastaFiles /hpcnfs/scratch/ED/genome/GRCh38.primary_assembly.genome.fa --sjdbGTFfile /hpcnfs/scratch/ED/genome/gencode.v34.primary_assembly.annotation.gtf --sjdbOverhang 50 
+
+# Deactivate the environment
+source deactivate /hpcnfs/home/ieo4890/.conda/envs/rnaseq_env
