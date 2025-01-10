@@ -1,0 +1,45 @@
+#!/bin/bash
+# Option for PBS
+### Job name
+#PBS -N quality_check_post_trimming_step
+
+### Join queuing system output and error files into a single output file
+#PBS -j oe
+
+### Request nodes, memory, walltime. N.B. THESE ARE REQUIRED
+#PBS -l select=1:ncpus=12:mem=40g
+
+### Set a list of email addresses that receive mail from PBS
+#PBS -M saveria.mazzara@ieo.it
+
+### Specify in which case an email should be send, a=abort, b=begin, e=end
+#PBS -m abe
+
+### Account string: defines the account sring associated with the job
+#PBS -A ieo4890
+
+# This script performs quality check after post trimming
+
+## Configuration
+## ----------------
+
+# Activate the conda environment
+source activate /hpcnfs/home/ieo4890/.conda/envs/rnaseq_env
+
+# path to the run folder
+RUN_PATH="/hpcnfs/data/ED/RNAseq/BCL2_massa"
+OUTPUT_PATH="/hpcnfs/data/ED/RNAseq/BCL2_massa/"
+
+## Quality Check Post Trimming
+## ---------------------------
+
+for file in $(ls $RUN_PATH | grep "S31141")
+do
+  SAMPLE=`basename $file`
+  cd $RUN_PATH/$SAMPLE
+  fastqc --o $OUTPUT_PATH/$SAMPLE ${SAMPLE}_R1_trim.fastq.gz ${SAMPLE}_R2_trim.fastq.gz
+done
+
+# Deactivate the environment 
+source deactivate /hpcnfs/home/ieo4890/.conda/envs/rnaseq_env
+
