@@ -10,13 +10,13 @@
 #PBS -l select=1:ncpus=12:mem=40g
 
 ### Set a list of email addresses that receive mail from PBS
-#PBS -M saveria.mazzara@ieo.it
+#PBS -M saveria.mazzara@gmail.com
 
 ### Specify in which case an email should be send, a=abort, b=begin, e=end
 #PBS -m abe
 
 ### Account string: defines the account sring associated with the job
-#PBS -A ieo4890
+#PBS -A mazzara
 
 # This script performs quality check after post trimming
 
@@ -24,22 +24,22 @@
 ## ----------------
 
 # Activate the conda environment
-source activate /hpcnfs/home/ieo4890/.conda/envs/rnaseq_env
+source activate /home/mazzara/.conda/envs/rnaseq_env
 
 # path to the run folder
-RUN_PATH="/hpcnfs/data/ED/RNAseq/LONCA"
-OUTPUT_PATH="/hpcnfs/data/ED/RNAseq/LONCA/"
+RUN_PATH="/data/RNAseq/BCL2"
+OUTPUT_PATH="/data/RNAseq/BLC2/"
 
 ## Quality Check Post Trimming
 ## ---------------------------
 
-for file in $(ls $RUN_PATH | grep "S38456")
+for file in $(ls $RUN_PATH | grep "Sample")
 do
   SAMPLE=`basename $file`
   cd $RUN_PATH/$SAMPLE
-  fastqc --o $OUTPUT_PATH/$SAMPLE ${SAMPLE}_R1_trim.fastq.gz ${SAMPLE}_R2_trim.fastq.gz
+  fastqc --o $OUTPUT_PATH/$SAMPLE ${SAMPLE}_R1_cleaning.fastq.gz ${SAMPLE}_R2_cleaning.fastq.gz
 done
 
 # Deactivate the environment 
-source deactivate /hpcnfs/home/ieo4890/.conda/envs/rnaseq_env
+source deactivate /home/mazzara/.conda/envs/rnaseq_env
 
