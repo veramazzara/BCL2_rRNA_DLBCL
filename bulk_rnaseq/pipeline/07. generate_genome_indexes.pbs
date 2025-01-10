@@ -10,15 +10,15 @@
 #PBS -l select=1:ncpus=12:mem=40g
 
 ### Set a list of email addresses that receive mail from PBS
-#PBS -M saveria.mazzara@ieo.it
+#PBS -M saveria.mazzara@gmail.com
 
 ### Specify in which case an email should be send, a=abort, b=begin, e=end
 #PBS -m abe
 
 ### Account string: defines the account string associated with the job
-#PBS -A ieo4890
+#PBS -A mazzara
 
-# This script performs the data download: reference genome (fasta file) and annotation file (gtf file)
+# This script performs the creation of a STAR genome index file
 
 
 
@@ -26,10 +26,10 @@
 ## --------------------
 
 # Activate the conda environment
-source activate /hpcnfs/home/ieo4890/.conda/envs/rnaseq_env
+source activate /home/mazzara/.conda/envs/rnaseq_env
 
 # path to the run folder
-GENOME_DIR="/hpcnfs/scratch/ED/genome/"
+GENOME_DIR="/scratch/genome/"
 
 
 ## Generate genome indexes Step
@@ -39,7 +39,7 @@ cd $GENOME_DIR
 
 #mkdir $GENOME_DIR/STAR
 
-STAR --runThreadN 8 --runMode genomeGenerate --genomeDir /hpcnfs/scratch/ED/genome/STAR --genomeFastaFiles /hpcnfs/scratch/ED/genome/GRCh38.primary_assembly.genome.fa --sjdbGTFfile /hpcnfs/scratch/ED/genome/gencode.v34.primary_assembly.annotation.gtf --sjdbOverhang 50 
+STAR --runThreadN 8 --runMode genomeGenerate --genomeDir /scratch/genome/STAR --genomeFastaFiles /scratch/genome/GRCh38.primary_assembly.genome.fa --sjdbGTFfile /scratch/genome/gencode.v34.primary_assembly.annotation.gtf --sjdbOverhang 50 
 
 # Deactivate the environment
-source deactivate /hpcnfs/home/ieo4890/.conda/envs/rnaseq_env
+source deactivate /home/mazzara/.conda/envs/rnaseq_env
