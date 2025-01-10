@@ -10,13 +10,13 @@
 #PBS -l select=1:ncpus=12:mem=40g
 
 ### Set a list of email addresses that receive mail from PBS
-#PBS -M saveria.mazzara@ieo.it
+#PBS -M saveria.mazzara@gmail.com
 
 ### Specify in which case an email should be send, a=abort, b=begin, e=end
 #PBS -m abe
 
 ### Account string: defines the account string associated with the job
-#PBS -A ieo4890
+#PBS -A mazzara
 
 # This script performs adpater removal step
 
@@ -26,28 +26,26 @@
 ## --------------------
 
 # Activate the conda environment
-source activate /hpcnfs/home/ieo4890/.conda/envs/rnaseq_env
+source activate /home/mazzara/.conda/envs/rnaseq_env
 
 # path to the run folder
-RUN_PATH="/hpcnfs/data/ED/RNAseq/LONCA"
-OUTPUT_PATH="/hpcnfs/data/ED/RNAseq/LONCA/"
-GENOME_DIR="/hpcnfs/scratch/ED/genome/STAR/"
-GTF_FILE="/hpcnfs/scratch/ED/genome/gencode.v34.primary_assembly.annotation.gtf"
-ADAPTER_FILE="/hpcnfs/home/ieo4890/.conda/pkgs/bbmap-38.67-h516909a_0/opt/bbmap-38.67-0/resources/adapters.fa"
+RUN_PATH="/data/RNAseq/BLC2"
+OUTPUT_PATH="/data/RNAseq/BCL2/"
+ADAPTER_FILE="/home/mazzara/.conda/pkgs/bbmap-38.67-h516909a_0/opt/bbmap-38.67-0/resources/adapters.fa"
 
 ## Adapter Removal Step
 ## --------------------
 
 
-for file in $(ls $RUN_PATH | grep "S38463")
+for file in $(ls $RUN_PATH | grep "Sample")
 do
    SAMPLE=`basename $file` 
    cd $RUN_PATH/$SAMPLE
-# for samplses squenced on single lane  
+# for samples sequenced on single lane  
 bbduk.sh in1=`find . -name *R1*` in2=`find . -name *R2*` out1=$OUTPUT_PATH/$SAMPLE/${SAMPLE}_R1_cleaning.fastq.gz out2=$OUTPUT_PATH/$SAMPLE/${SAMPLE}_R2_cleaning.fastq.gz ref=$ADAPTER_FILE ktrim=r k=23 mink=11 hdist=1 tpe tbo 
-# for sample sequenced on multiple lanes
+# for samples sequenced on multiple lanes
 #   bbduk.sh in1=`find . -name *NT_R1.fastq.gz` in2=`find . -name *NT_R2.fastq.gz` out1=$OUTPUT_PATH/$SAMPLE/${SAMPLE}_R1_cleaning.fastq.gz out2=$OUTPUT_PATH/$SAMPLE/${SAMPLE}_R2_cleaning.fastq.gz ref=$ADAPTER_FILE ktrim=r k=23 mink=11 hdist=1 tpe tbo
 done
 
 # Deactivate the environment
-source deactivate /hpcnfs/home/ieo4890/.conda/envs/rnaseq_env
+source deactivate /home/mazzara/.conda/envs/rnaseq_env
