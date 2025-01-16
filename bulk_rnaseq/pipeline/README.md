@@ -1,7 +1,7 @@
-RNA-sequencing of SUDHL-5 cell line treated with  three RiBi inhibitors (Doxorubucin, ActD and CX5461) in the absence or presence of BCL-2.
-Final libraries, prepared in triplicate, were sequenced on an Illumina Hi-Seq 2000with paired-end 2 x 51-bp read lengths.
-In total, the RNA-seq cohort inlcudes 24 samples.
-The below bioinformatic sequencing pipepline has been applied for each sample.
+RNA-sequencing of SUDHL-5 cell line treated with  three RiBi inhibitors (Doxorubucin, ActD and CX5461) in the absence or presence of BCL-2.<br>
+Final libraries, prepared in triplicate, were sequenced on an Illumina Hi-Seq 2000with paired-end 2 x 51-bp read lengths.<br>
+In total, the RNA-seq cohort inlcudes 24 samples.<br>
+The below bioinformatic sequencing pipepline has been applied for each sample.<br>
 
 **01. download_genome.pbs**                    : download genome annotation (GRCh38)
 
