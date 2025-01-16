@@ -9,3 +9,18 @@
 7. plotting_Enrichment_Analysis.R/Plotting_Enrichment_Analysis_paper.R
 8. TP53_targets.R/TP53targets.R
 9. BCL2_paper.R : FigS2
+
+
+
+Mandatory Figures/Tables
+mentioned order (in the paper)
+ P
+ PCA fig S4A
+ DESeq tables SuppFile1 (to be confirmed)
+ Funtional Enrichment Analysis FigS4B,C
+ TRANSFAC quesry Fig3C
+ radar plot Fig3D, Fig3E (python code?)
+ 
+
+
+
