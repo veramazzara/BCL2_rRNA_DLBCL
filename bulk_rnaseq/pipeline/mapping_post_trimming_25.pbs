@@ -1,0 +1,50 @@
+#!/bin/bash
+# Option for PBS
+### Job name
+#PBS -N mapping_post_trimming_step
+
+### Join queuing system output and error files into a single output file
+#PBS -j oe
+
+### Request nodes, memory, walltime. N.B. THESE ARE REQUIRED
+#PBS -l select=1:ncpus=12:mem=40g
+
+### Set a list of email addresses that receive mail from PBS
+#PBS -M saveria.mazzara@ieo.it
+
+### Specify in which case an email should be send, a=abort, b=begin, e=end
+#PBS -m abe
+
+### Account string: defines the account string associated with the job
+#PBS -A ieo4890
+
+# This script performs the data download: reference genome (fasta file) and annotation file (gtf file)
+
+
+
+## Configuration 
+## --------------------
+
+# Activate the conda environment
+source activate /hpcnfs/home/ieo4890/.conda/envs/rnaseq_env
+
+# path to the run folder
+INPUT_DIR="/hpcnfs/scratch/ED/trimm_mapping/BCL2"
+OUTPUT_DIR="/hpcnfs/scratch/ED/trimm_mapping/BCL2/"
+GENOME_DIR="/hpcnfs/scratch/ED/genome/STAR/"
+GTF_FILE="/hpcnfs/scratch/ED/genome/gencode.v34.primary_assembly.annotation.gtf"
+
+
+## Generate genome indexes Step
+## --------------------
+
+
+SAMPLE=`basename $OUTPREFIX`
+cd $INPUT_DIR/$SAMPLE
+
+
+STAR --genomeDir $GENOME_DIR --runThreadN 10 --readFilesIn *trim_R1.fastq.gz *trim_R2.fastq.gz --readFilesCommand zcat --outFileNamePrefix $OUTPUT_DIR/$SAMPLE --sjdbGTFfile $GTF_FILE --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonicalUnannotated --quantMode GeneCounts --outSAMtype BAM SortedByCoordinate --limitBAMsortRAM 20000000000
+
+
+# Deactivate the environment
+source deactivate /hpcnfs/home/ieo4890/.conda/envs/rnaseq_env
