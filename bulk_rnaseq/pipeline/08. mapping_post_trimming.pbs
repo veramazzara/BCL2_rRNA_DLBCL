@@ -33,7 +33,7 @@ GENOME_DIR="/scratch/genome/STAR/"
 GTF_FILE="/scratch/genome/gencode.v34.primary_assembly.annotation.gtf"
 
 
-## Generate genome indexes Step
+## Mapping & Quantification Step
 ## --------------------
 
 
@@ -41,7 +41,7 @@ SAMPLE=`basename $OUTPREFIX`
 cd $INPUT_DIR/$SAMPLE
 
 
-STAR --genomeDir $GENOME_DIR --runThreadN 10 --readFilesIn *trim_R1.fastq.gz *trim_R2.fastq.gz --readFilesCommand zcat --outFileNamePrefix $OUTPUT_DIR/$SAMPLE --sjdbGTFfile $GTF_FILE --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonicalUnannotated --quantMode GeneCounts --outSAMtype BAM SortedByCoordinate --limitBAMsortRAM 20000000000
+STAR --genomeDir $GENOME_DIR --runThreadN 10 --readFilesIn *_R1_cleaning.fastq.gz *_R2_cleaning.fastq.gz --readFilesCommand zcat --outFileNamePrefix $OUTPUT_DIR/$SAMPLE --sjdbGTFfile $GTF_FILE --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonicalUnannotated --quantMode GeneCounts --outSAMtype BAM SortedByCoordinate --limitBAMsortRAM 20000000000
 
 
 # Deactivate the environment
