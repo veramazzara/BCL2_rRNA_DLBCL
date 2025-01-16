@@ -18,7 +18,7 @@
 ### Account string: defines the account string associated with the job
 #PBS -A mazzara
 
-# This script computes the level of rRNA contamination using seal.sh (BBmap tool)
+# Optional step: useful to infer the type of sequencing library  (unstranded or stranded) 
 
 
 ## Configuration 
@@ -34,7 +34,7 @@ GTF_FILE="/scratch/genome/gencode.v34.primary_assembly.annotation.gtf"
 ## Infer Library Strandness
 ## --------------------
 
-for file in $(ls $RUN_PATH | grep "S38463")
+for file in $(ls $RUN_PATH | grep "Sample")
 do
    SAMPLE=`basename $file`
    cd $RUN_PATH/$SAMPLE
