@@ -1,3 +1,13 @@
+| Notebook/R script         | Figures       | Description         |
+|---------------------------|---------------|---------------------|
+| 3D_pca_bcl2_paper.ipynb   | Fig. S4A      |  create 3D PCA plot 
+blah balh|
+
+| Altro dato                | Altro dato    | Altro dato  |
+
+
+
+
 
 **List to be confirmed** 
 1. bcl2_alternative.Rmd
