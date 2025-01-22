@@ -1,4 +1,4 @@
-RNA-sequencing of SUDHL-5 cells (B lymphocyte cell line) treated with  three RiBi inhibitors (Doxorubucin, ActD and CX5461) in the absence or presence of BCL-2.<br>
+RNA-sequencing of SUDHL-5 cells (DLBCL cell line) treated with  three RiBi inhibitors (Doxorubucin, ActD and CX5461) in the absence or presence of BCL-2.<br>
 Final libraries, prepared in triplicate, were sequenced on an Illumina Hi-Seq 2000with paired-end 2 x 51-bp read lengths.<br>
 In total, the RNA-seq cohort inlcudes 24 samples as reported in the table "SuppTab_RNAcohort.xlsx".<br>
 The below bioinformatic sequencing pipepline has been applied for each sample.<br>
