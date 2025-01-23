@@ -1,7 +1,7 @@
 | Notebook/R script         | Figures       | Description         |
-|:---------------------------|:---------------|:---------------------|
-| 3D_pca_bcl2_paper.ipynb     | Fig. S4A        |  create 3D PCA plot |
-| Altro dato                | Altro dato    | Altro dato  |
+|:----------------------------|:-----------------|:-------------------------------------|
+| 3D_pca_bcl2_paper.ipynb     | Fig. S4A         |  3D PCA plot                         |
+| radar_plot_drugs.ipynb      | Fig. 3D,S4D, S4E |  radar plots fc levels of p53 targets|
 
 
 
@@ -22,12 +22,11 @@
 
 Mandatory Figures/Tables
 mentioned order (in the paper)
- P
- PCA fig S4A
+ **PCA fig S4A (DONE)**
  DESeq tables SuppFile1 (to be confirmed)
  Funtional Enrichment Analysis FigS4B,C
  TRANSFAC quesry Fig3C
- radar plot Fig3D, Fig3E (python code?)
+ **radar plot Fig3D, FigS4D, S4E (DONE)**
  
 
 
