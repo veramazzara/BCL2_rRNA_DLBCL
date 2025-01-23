@@ -7,8 +7,7 @@ The main folder, bulk_rnaseq, is subdivided in:
 
 pipeline: contains the custom pipeline of RNA-seq 
 analysis: contains the scripts of the downstream analysis and the code to produce the figures asssociated to the RNA-seq data
-To run the downstreamn analysis we used mainly R scripts and some Jupyter notebooks. If you want to convert the scripts and run them as notebook using Jupyter, please see Jupytext
+To run the downstreamn analysis we used mainly R scripts and some Jupyter notebooks.
 
-The RNA-seq data (raw data) generated during this study are available on request fro the corresponding author: enrico.derenzini@ieo.it.
-
+The RNA-seq data (raw data) generated during this study are available on request fro the corresponding author: enrico.derenzini@ieo.it
 
