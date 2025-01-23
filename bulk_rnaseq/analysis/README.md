@@ -22,7 +22,7 @@
 
 Mandatory Figures/Tables
 mentioned order (in the paper)
- **PCA fig S4A (DONE)** \n
+ **PCA fig S4A (DONE)**\n
  DESeq tables SuppFile1 (to be confirmed) \n
  Funtional Enrichment Analysis FigS4B,C   \n
  TRANSFAC quesry Fig3C     \n
