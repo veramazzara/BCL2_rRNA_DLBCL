@@ -2,9 +2,8 @@
 |:-----------------------------------|:------------------|:-------------------------------------|
 | 3D_pca_bcl2_paper.ipynb            | Fig. S4A          |  3D PCA plot                         |
 | plotting_enrichment_analysis.R     | Fig. S4B, S4C     |  KEGG analysis and plotting          |
-| radar_plot_drugs.ipynb             | Fig. 3D, S4D, S4E |  radar plots fc levels of p53 targets|
-
-
+| TP53targets.R                      | Fig. 3C           |  Venn diagrams & 256 p53 targets     |
+| radar_plot_drugs.ipynb             | Fig. 3D, S4D, S4E |  radar plots fc levels of p53 target |
 
 
 **List to be confirmed** 
@@ -25,7 +24,7 @@ mentioned order (in the paper)
  **PCA fig S4A (DONE)**\n
  DESeq tables SuppFile1 (to be confirmed) \n
  **Funtional Enrichment Analysis FigS4B,C (DONE)**\n
- TRANSFAC quesry Fig3C     \n
+ **TRANSFAC quesry Fig3C  (DONE)**   \n
  **radar plot Fig3D, FigS4D, S4E (DONE)**
  
 
