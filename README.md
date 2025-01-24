@@ -10,5 +10,5 @@ The main folder, bulk_rnaseq, is subdivided in:
 To run the downstream analysis we used mainly R scripts and some Jupyter notebooks.
 
 The RNA-seq data (raw data) generated during this study are available on request from the corresponding author: enrico.derenzini@ieo.it.
-For any question about computational workfow feel free to contact saveria.mazzara@gmail.com.
+For any question about computational workflow feel free to contact: saveria.mazzara@gmail.com.
 
