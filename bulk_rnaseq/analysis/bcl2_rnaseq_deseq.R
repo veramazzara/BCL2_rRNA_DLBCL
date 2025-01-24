@@ -1,7 +1,7 @@
-# This scritps aims to identify DE lists of RNAseq samples (second run)
+# ##This scritps aims to identify DEG lists of RNAseq samples (second run)
+# Author: Saveria Mazzara
 
-
-# Laod R libraries
+# load R libraries
 library(DT)
 library(data.table)
 library(stringr)
@@ -9,28 +9,27 @@ library(ggplot2)
 library(DESeq2)
 library(tidyverse)
 library(reshape2)
-library(pheatmap)
+
 
 library(purrr)     # map function
 library(readr)     # read_tsv
 library(dplyr)
 library(plyr)
-library(plotly)
+
 
 library(RColorBrewer)
-library(affy)
 library(viridis)
 
 
-# Load count data (raw counts, STAR output)
-counts<-read.table("/Users/ieo4890/derenzini/datasets/RNAseq/total_counts_BCL2_massa_2run.txt")
+# load count data (raw counts, STAR output)
+counts<-read.table("/bulk_rnase/analysis/local_data/total_counts_bcl2.txt")
 
 # prepare the count matrix
 countdata<-counts
 
-# remove the gene ensembl version
+# (optional) remove the gene ensembl version 
 # rownames(countdata)<-gsub("\\..*$","",rownames(countdata))
-#pseudoCount = log2(countdata + 1)
+
 
 # prepare the condition info
 sample_condition<-c("E_NT","E_DOXO","E_ACTD","E_CX","BCL2_NT","BCL2_DOXO","BCL2_ACTD","BCL2_CX",
@@ -63,23 +62,23 @@ dds<-DESeqDataSetFromMatrix(countData=countdata,
 # track memory of original dds object
 dds_original<-dds
 
-# Gene Biotype
-gene_biotype<-read.table("/Users/ieo4890/derenzini/datasets/RNAseq/gene_biotype.txt",skip=5)
+# (optional) gene biotype
+#gene_biotype<-read.table("/gene_biotype.txt",skip=5)
 # filter only gene_type
-gene_biotype<-filter(gene_biotype,V3 == "gene_type")
+#gene_biotype<-filter(gene_biotype,V3 == "gene_type")
 # drop levels (e.g. column V4 has inside levels)
-gene_biotype<-droplevels(gene_biotype)
+#gene_biotype<-droplevels(gene_biotype)
 
 ### Exploratory Analysis: PCA 
 
   # Load object useful for PCA
-rld<-readRDS("/Users/ieo4890/derenzini/datasets/RNAseq/rlog_bcl2_massa_global_2run.rds")
+rld<-readRDS("/bulk_rnaseq/analysis/local_data/rlog_bcl2_global.rds")
 
-  # PCA computation
+  # PCA computation using the deseq2 function
 data <- plotPCA(rld, intgroup =c("condition"), returnData=TRUE)
 percentVar <- round(100 * attr(data, "percentVar"))
 
- # Extract the 3D PCA coordinates
+ # Extract the 3D PCA coordinates (useful for creating 3d pca plot, see 3D_pca_bcl2.ipynb)
 rv <- rowVars(assay(rld),useNames=TRUE)
 ntop = 500
 select <- order(rv, decreasing = TRUE)[seq_len(min(ntop, length(rv)))]
@@ -87,11 +86,11 @@ pca <- prcomp(t(assay(rld)[select, ]))
 percentVar_self <- pca$sdev^2/sum(pca$sdev^2)
 
 pca_bcl2<-as.data.frame(pca$x[,1:3])
+# save the object
 saveRDS(pca_bcl2,file="3d_pca_bcl2.rds")
 
- # PCA visualization
-
-ggplot(data,aes(PC1,PC2,colour=condition))+geom_point(size=3)+
+ # 2d pca visualization using ggplot
+  ggplot(data,aes(PC1,PC2,colour=condition))+geom_point(size=3)+
   ggtitle("All samples")+
   xlab(paste0("PC1: ",percentVar[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar[2],"% variance"))+
@@ -154,16 +153,14 @@ colnames(genes_info)<-c("ensembl_gene_id","gene_type","gene_name")
 res.anno_Ent_vs_Edoxo <- merge (res_sig_Ent_vs_Edoxo, genes_info, by ="ensembl_gene_id", all.x = TRUE) 
 res.anno_Ent_vs_Edoxo<- res.anno_Ent_vs_Edoxo[order(res.anno_Ent_vs_Edoxo$padj),] 
 
- # !!!Note: this file is saved /scripts/BCL2/massa/
-#write.csv(res.anno_Ent_vs_Edoxo,file = "DE_Ent_vs_Edoxo.csv",row.names = F) 
+# save the file
+# write.csv(res.anno_Ent_vs_Edoxo,file = "DE_Ent_vs_Edoxo.csv",row.names = F) 
 
- # heatmap on DE genes (heatmap on DE genes with padj<0.05)
-
-#rm(temp,temp_extended)     
+ # heatmap on DE genes (heatmap on DE genes with padj<0.05)  
 # all DE genes 
 alpha=0.05 
 
-# recover gene annotation 
+# recover gene annotation  and filtering for padj <0.05 and drop NA
 temp<-res_Ent_vs_Edoxo[res_Ent_vs_Edoxo$padj <= alpha & !is.na(res_Ent_vs_Edoxo$padj),] 
 temp$ensembl_gene_id<-rownames(temp) 
 
@@ -174,7 +171,7 @@ temp_extended<-temp_extended[order(temp_extended$padj),]
 # protein_coding_filter
 temp_extended_protein<-filter(temp_extended,gene_type=="protein_coding")
 
-# !!!Note: this file is saved /scripts/BCL2/massa/
+# save the results
 #write.csv(temp_extended,file="DE_analysis_filtered_Ent_vs_Edoxo.csv",row.names = F) 
 
 gene.kept_Ent_vs_Edoxo <- temp_extended$ensembl_gene_id 
@@ -185,7 +182,6 @@ rownames(countTable.kept_Ent_vs_Edoxo)<-gene.kept.symbol_Ent_vs_Edoxo
 
 # select only samples of investigation 
 countTable.kept_Ent_vs_Edoxo<-countTable.kept_Ent_vs_Edoxo[,pos] 
-
 
 # insert the annotation column 
 annotation_col = data.frame(Condition = factor(rep(c("E_NT","E_DOXO"),times=3))) 
@@ -208,7 +204,6 @@ pheatmap(as.matrix((countTable.kept_Ent_vs_Edoxo)),scale="row",
 cmp<-c("E_NT","E_ACTD") 
 pos<-which(coldata[,1] %in% cmp) 
 
-
 # DE  
 res_Ent_vs_Eactd <- results(waldTestResult, alpha=alpha,contrast=c("condition", "E_ACTD", "E_NT"), pAdjustMethod="BH") 
 # Order the table by decreasing p-valuer 
@@ -216,7 +211,6 @@ res_Ent_vs_Eactd <- res_Ent_vs_Eactd[order(res_Ent_vs_Eactd$padj),]
 
 summary(res_Ent_vs_Eactd) 
 table(res_Ent_vs_Eactd$padj < 0.05) 
-
 
 # recover gene annotation 
 normalized.counts <- as.data.frame(counts(dds.norm, normalized=TRUE )) 
@@ -235,7 +229,6 @@ genes_info=gene_biotype[match(rownames(res_sig_Ent_vs_Eactd),gene_biotype$V2),]
 # mantain only useful information 
 genes_info=genes_info[,c(2,4,6)] 
 colnames(genes_info)<-c("ensembl_gene_id","gene_type","gene_name") 
-
 
 res.anno_Ent_vs_Eactd <- merge (res_sig_Ent_vs_Eactd, genes_info, by ="ensembl_gene_id", all.x = TRUE) 
 res.anno_Ent_vs_Eactd<- res.anno_Ent_vs_Eactd[order(res.anno_Ent_vs_Eactd$padj),] 
@@ -269,7 +262,6 @@ rownames(countTable.kept_Ent_vs_Eactd)<-gene.kept.symbol_Ent_vs_Eactd
 # select only samples of investigation 
 countTable.kept_Ent_vs_Eactd<-countTable.kept_Ent_vs_Eactd[,pos] 
 
-
 # insert the annotation column 
 annotation_col = data.frame(Condition = factor(rep(c("E_NT","E_ACTD"),times=3))) 
 rownames(annotation_col)<-colnames(countTable.kept_Ent_vs_Eactd) 
@@ -302,7 +294,6 @@ res_Ent_vs_Ecx <- res_Ent_vs_Ecx[order(res_Ent_vs_Ecx$padj),]
 summary(res_Ent_vs_Ecx) 
 table(res_Ent_vs_Ecx$padj < 0.05) 
 
-
 # recover gene annotation 
 normalized.counts <- as.data.frame(counts(dds.norm, normalized=TRUE )) 
 gene_ids = rownames(normalized.counts) 
@@ -330,7 +321,6 @@ res.anno_Ent_vs_Ecx<- res.anno_Ent_vs_Ecx[order(res.anno_Ent_vs_Ecx$padj),]
 
 
 # heatmap on DE genes 
-
 # all DE genes 
 rm(temp,temp_extended) 
 alpha=0.05 
@@ -373,8 +363,6 @@ pheatmap(as.matrix((countTable.kept_Ent_vs_Ecx)[,c(1,3,5,2,4,6)]),scale="row",
          main=" Empty NT vs Empty CX", 
          fontsize_row = 4 
 ) 
-
-
 
 
 cmp<-c("BCL2_NT","BCL2_DOXO") 
@@ -460,42 +448,14 @@ out<-pheatmap(as.matrix((countTable.kept_BCL2nt_vs_BCL2doxo)),scale="row",
          fontsize_row = 4
 ) 
 
-res <- as.matrix((countTable.kept_BCL2nt_vs_BCL2doxo))[c(out$tree_row[["order"]]),out$tree_col[["order"]]]
-res<-as.data.frame(res)
 
-temp_out_cluster<-(sort(cutree(out$tree_row, k=2)))
-out_cluster<-data.frame(order=sort(cutree(out$tree_row, k=2)))
-out_cluster$gene<-names(temp_out_cluster)
-
-res$cluster<-out_cluster$order[ order(match(out_cluster$gene,rownames(res)))]
-
-### manual division
-row_clust2<-res[(2080:3641),]
-row_clust1<-res[(1:2079),]
-
-new_clust<-rbind(row_clust2,row_clust1)
-
-pheatmap(as.matrix((new_clust)),scale="row", 
-         cluster_rows = F,cluster_cols=F, 
-         annotation_col = annotation_col, 
-         annotation_colors=color_annotation_col[1], 
-         #cellheight=1.8, 
-         show_rownames  = F, 
-         main=" BCL2 NT vs BCL2 DOXO", 
-         fontsize_row = 4 
-     
-) 
-
-
-# prepare matrix for pheatmap
 
 ### BCL2 NT vs BCL2 ACTD
 cmp<-c("BCL2_NT","BCL2_ACTD") 
 pos<-which(coldata[,1] %in% cmp) 
 
-
 res_BCL2nt_vs_BCL2actd <- results(waldTestResult, alpha=alpha,contrast=c("condition", "BCL2_ACTD", "BCL2_NT"), pAdjustMethod="BH") 
-# Order the table by decreasing p-valuer 
+# Order the table by decreasing p-value
 res_BCL2nt_vs_BCL2actd <- res_BCL2nt_vs_BCL2actd[order(res_BCL2nt_vs_BCL2actd$padj),] 
 
 summary(res_BCL2nt_vs_BCL2actd) 
@@ -520,7 +480,6 @@ genes_info=gene_biotype[match(rownames(res_sig_BCL2nt_vs_BCL2actd),gene_biotype$
 genes_info=genes_info[,c(2,4,6)] 
 
 colnames(genes_info)<-c("ensembl_gene_id","gene_type","gene_name") 
-
 
 res.anno_BCL2nt_vs_BCL2actd <- merge (res_sig_BCL2nt_vs_BCL2actd, genes_info, by ="ensembl_gene_id", all.x = TRUE) 
 res.anno_BCL2nt_vs_BCL2actd<- res.anno_BCL2nt_vs_BCL2actd[order(res.anno_BCL2nt_vs_BCL2actd$padj),] 
@@ -571,8 +530,6 @@ pheatmap(as.matrix((countTable.kept_BCL2nt_vs_BCL2actd)[,c(5,1,3,6,2,4)]),scale=
          main=" BCL2 NT vs BCL2 ACTD", 
          fontsize_row = 4 
 ) 
-
-
 
 
 ### BCL2 NT vs BCL2 CX
