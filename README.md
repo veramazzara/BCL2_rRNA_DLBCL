@@ -1,6 +1,6 @@
-# BCL2 rRNA DLBCL (Rossi A et al.)
+# BCL2 rRNA DLBCL (Rossi A. et al.)
 
-This is a separate repository from our manuscript **"Impaired rRNA synthesis contributes to BCL-2 induced chemoresistance in Diffuse Large B-cell Lymphoma"** by A. Rossi et al, collecting code we used to process and analyzed RNAseq data in our manuscript (and for making figures).
+This is a separate repository from our manuscript **"Impaired rRNA synthesis contributes to BCL-2 induced chemoresistance in Diffuse Large B-cell Lymphoma"** by Rossi A. et al, collecting code we used to process and analyzed RNAseq data in our manuscript (and for making figures).
 
 ---------------------------------------------------------------------------------------
 The main folder, bulk_rnaseq, is subdivided in:
