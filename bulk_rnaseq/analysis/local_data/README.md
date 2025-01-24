@@ -1,6 +1,6 @@
 **Data**
 
-This list includes data necessary for running some scripts of the analysis as well as data generated as output of these scripts.
+This folder, local_data, includes data necessary for running some scripts of the analysis folder as well as data generated as output of these scripts.
 
 Specifically:
 
